@@ -1,0 +1,6 @@
+nltk
+scikit-learn
+pandas
+umap-learn
+sentence-transformers
+matplotlib
