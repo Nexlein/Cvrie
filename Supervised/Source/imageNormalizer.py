@@ -56,7 +56,7 @@ def _imageResizerFormater(filePath):
 
     output_dir = Path(path.parent.parent, "Normalized", path.name)
     if not output_dir.parent.exists() or not output_dir.parent.is_dir():
-            output_dir.mkdir(parents=True)
+        output_dir.parent.mkdir(parents=True)
     img_resized.save(output_dir)
 
 def imageNormalizer(bodyPartList=None):

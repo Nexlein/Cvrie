@@ -5,23 +5,29 @@
 
 ## Overview
 
-Cvrie is a comprehensive Machine Learning exploration project split into two primary paradigms: **Supervised** and **Unsupervised** learning. Built entirely in Python using standard data science libraries, this project serves as a sandbox for implementing, training, evaluating, and visualizing various predictive and clustering models.
+Cvrie is a Machine Learning project split into two parts, built in Python with scikit-learn:
+
+- **Supervised:** classify X-ray images by body part (chest, head, hand, foot).
+- **Unsupervised:** cluster free-text descriptions of patient symptoms into groups of similar cases.
+
+Each part has a Jupyter notebook that documents the experiments, and a few Python helper scripts.
 
 ## The Two Paradigms
 
 ### 1. Supervised Learning
 
-In the `Supervised` directory, models are trained using **labeled datasets**. The goal is to learn a mapping from inputs to outputs to make accurate predictions on unseen data.
+In the `Supervised` directory, models learn to recognise which body part an X-ray shows (Chest, Head, Hand, Foot). Images are converted to grayscale, cropped and resized to 64×64, then flattened into 4096 pixel features.
 
-- **Common Tasks:** Classification (predicting categories) and Regression (predicting continuous values).
-- **Workflow:** Load dataset → Preprocess → Train-Test Split → Train Model → Evaluate Accuracy/Loss → Save Model (`ModelSave/`).
+- **Models:** Random Forest, PCA + SVM (scaling, PCA keeping 95% of the variance, RBF SVM) and a Multi-Layer Perceptron, each tuned with `GridSearchCV`.
+- **Workflow:** Normalize images → Build the dataset CSV → Train-Test Split → Train Model → Evaluate (accuracy, confusion matrix) → Save Model (`ModelSave/`).
+- The repository only ships 5 sample images per class; the full dataset used for training is not included.
 
 ### 2. Unsupervised Learning
 
-In the `Unsupervised` directory, algorithms are tasked with finding hidden structures in **unlabeled data**. The models must discover patterns, similarities, and groupings entirely on their own.
+In the `Unsupervised` directory, about 1,000 unlabeled patient symptom descriptions (`Dataset/Student_Dataset.csv`) are grouped into clusters of similar cases.
 
-- **Common Tasks:** Clustering (e.g., K-Means, grouping similar data points) and Dimensionality Reduction (e.g., PCA, simplifying complex datasets).
-- **Workflow:** Load raw data → Extract Features → Apply Clustering/Reduction → Visualize groupings.
+- **Techniques:** text cleaning with NLTK, text embeddings with TF-IDF and SentenceTransformers, clustering with K-Means and HDBSCAN, evaluation with the silhouette score, and UMAP for dimensionality reduction and visualization.
+- **Workflow:** Load raw text → Clean → Embed → Cluster → Evaluate → Visualize groupings.
 
 ## Installation
 
@@ -42,11 +48,18 @@ pip install -r requirements.txt
 - `pandas` & `numpy` (Data manipulation)
 - `scikit-learn` (Machine Learning algorithms)
 - `matplotlib` (Data visualization)
+- `pillow` (Image loading, Supervised)
+- `nltk`, `sentence-transformers`, `umap-learn` (Text processing and embeddings, Unsupervised)
 
 ## How to Use
 
-Both the `Supervised` and `Unsupervised` directories contain their respective `Source/` folders with executable Python scripts, and `Notebooks/` for interactive Jupyter experiments.
+The experiments live in the notebooks: open `Supervised/Notebooks/supervised.ipynb` or `Unsupervised/Notebooks/unsupervised.ipynb` with Jupyter and run the cells in order. `Source/` holds the helper modules they import.
 
-- **To run a script:** `python Source/main.py`
-- **To explore data interactively:** Open the `.ipynb` files in the `Notebooks/` folder using Jupyter.
-- Trained models are automatically exported to the `ModelSave/` directory so they can be reused without retraining!
+The supervised notebook saves its trained models to `Supervised/ModelSave/`. To classify your own X-rays with the saved models, put the images (`.jpg`, `.jpeg` or `.png`) in `Supervised/Dataset/Tests/Images/`, then run from the `Supervised` directory:
+
+```bash
+python Source/testModel.py -m mlp     # or svm, rf
+python Source/testModel.py --every-models
+```
+
+Each image is normalized to `Dataset/Tests/Normalized/` and the predicted body part is printed. `python Source/cleanupProject.py` removes the generated files.

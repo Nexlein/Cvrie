@@ -10,15 +10,15 @@ import joblib
 
 MODELS = {
     "mlp": {
-        "model": Path(PROJECT_ROOT, "ModelSave", "mlp_model.pkl"),
+        "model": Path(PROJECT_ROOT, "ModelSave", "modelMLP.pkl"),
         "scaler": Path(PROJECT_ROOT, "ModelSave", "scaler.pkl"),
-        "label_encoder": Path(PROJECT_ROOT, "ModelSave", "label_encoder.pkl"),
+        "label_encoder": Path(PROJECT_ROOT, "ModelSave", "labelEncoder.pkl"),
     },
     "svm": {
-        "model": Path(PROJECT_ROOT, "ModelSave", "pipeline_svc.pkl"),
+        "model": Path(PROJECT_ROOT, "ModelSave", "pipelineSVC.pkl"),
     },
     "rf": {
-        "model": Path(PROJECT_ROOT, "ModelSave", "rf_model.pkl")
+        "model": Path(PROJECT_ROOT, "ModelSave", "randomForest.pkl")
     },
 }
 
